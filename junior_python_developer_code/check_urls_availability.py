@@ -1,10 +1,23 @@
 
 # This code check what search service is available
+"""Этот код проверяет доступность сервиса, однако в коде нет ни одной обработки если сервис таки недоступен это 1.
+2 в тексте задания написано что это граббер ссылок, в моем понимании граббер ссылок это инструмент позволяющий забирать
+ссылки откуда-то. тут же мы забираем всё тело по урл. очень странно.
+"""
 # coding: utf-8
 NEEDED_URLS = ['https://google.com/', 'https://www.semrush.com/', 'https://yandex.ru/time/', 'https://yandex.ru/time/']
+# Нужен двойной отступ
+def get_fetch_urls(urls, cache={}): # Добавить комментарий по функции, и так со всеми функциями,кассами
+    """Это комментарий описывающий, что делает функция
 
-def get_fetch_urls(urls, cache={}):
+    :param urls: параметр принимает список урл для проверки
+    :param cache:
+    :return: Что возвращает функция
+    """
     import requests
+    """
+    Импорты поместить в начале файла, до объявления переменных, так далее для всех импортов
+    """
     urls_size = len(urls)
     result = []
 
@@ -14,22 +27,23 @@ def get_fetch_urls(urls, cache={}):
             print('url in cache ' + url)
             result.append(cache[url])
 
-        response = requests.get(url)
+        response = requests.get(url) # может быть добавим try catch если что-то пойдет не так?
         body = response.content
         cache[url] = body
         result.append(body)
         urls_size -= 1
 
     return result
-def get_full_moon_phase():
-    import time
-    time.sleep(5)
-    import random
-    time.sleep(5)
+def get_full_moon_phase(): # Снова описание функции + двойной отступ.
+    import time # Унести импорт в начало файла
+    time.sleep(5) # Явно ненужный слип 1
+    import random # Унести импорт в начало файла
+    time.sleep(5) # Явно ненужный слип 2
     return random.choice([True, False])
-
+# Здесь нужно 2 отступа
 class UrlGetter:
-    debug_mode_by_moon_phase = get_full_moon_phase()
+    debug_mode_by_moon_phase = get_full_moon_phase() # Во всем классе данный метод используется один раз можно оставить
+    # просто random.choice([True, False]) и не плодить лишних сущностей
 
     fetched_urls = []
 
@@ -54,7 +68,14 @@ class UrlGetter:
         return bool(url in self.fetched_urls)
 
 # my tests
-
+"""
+В тестах совершенно непонятно что и где проверяется, если не использовать фреймворк для юниттестов, то лучше всего
+оформить их в виде методов класса с говорящими названиями. 
+например:
+class checkUrlsAvailabilityTests:
+       def check_get_fetch_urls()
+таким образом даже в сложном коде можно будет разобрать какой тест какой метод проверяет.
+"""
 fetched_urls = ['https://google.com/']
 getter = UrlGetter(fetched_urls)
 for url in NEEDED_URLS:
@@ -62,21 +83,22 @@ for url in NEEDED_URLS:
 reuzuult1 = getter.get_urls_data(NEEDED_URLS)
 
 import time
-time.sleep(5)
+time.sleep(5) # не очень понятный слип
 
-fetched_urls = ['https://google.com/']
-getter = UrlGetter(NEEDED_URLS)
+fetched_urls = ['https://google.com/'] # Зачем снова объявлять эту переменную? тем более если дальше используется
+# NEEDED_URLS
+getter = UrlGetter(fetched_urls)
 reuzuult2 = getter.get_urls_data(NEEDED_URLS)
 
 
-import os
-file = open(os.getcwd()+'/data1.html', 'wb')
-file.writelines(reuzuult1)
+import os # Импорт унести вверх
+file = open(os.getcwd()+'/data1.html', 'wb') # Для работы с файлами лучше использовать оператор контекста with
+file.writelines(reuzuult1) # file не закрыт
 file2 = open(os.getcwd()+'/data2.html', 'wb')
-file2.writelines(reuzuult2)
+file2.writelines(reuzuult2) # то же самое file2 остается не закрытым
 
-assert reuzuult1 == reuzuult2
+assert reuzuult1 == reuzuult2 # А должны ли данные быть одинаковыми?
 
 if __name__ == '__main__':
-    getter = UrlGetter()
+    getter = UrlGetter() # Нельзя создать экземпляр класса без указания переменных прокинутых в __init__
     print(getter.get_urls_data(NEEDED_URLS))
