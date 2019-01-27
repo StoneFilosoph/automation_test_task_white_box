@@ -97,7 +97,7 @@ class SemrushUiTests(unittest.TestCase):
         save_note_button = notes_page.save_note_button()
         save_note_button.click()
         # проверяем последнюю созданную заметку
-        self.assertTrue(notes_page.lastesl_created_note(note_name)) у
+        self.assertTrue(notes_page.lastesl_created_note(note_name))
         browser.close()
 
     def test_project_creating(self):
